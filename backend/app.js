@@ -1,4 +1,5 @@
 const express = require("express");
+const fileUpload = require("express-fileupload");
 
 const userRoutes = require("./routes/userRoutes");
 const studentRoutes = require("./routes/studentRoutes");
@@ -12,7 +13,8 @@ connectDB();
 
 const app = express();
 
-app.use(express.json({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
+app.use(fileUpload({ useTempFiles: true }));
 
 app.use("/user", userRoutes);
 app.use("/student", studentRoutes);
