@@ -64,4 +64,93 @@ router.get("/course-details/:id", checkAuth, async (req, res) => {
   }
 });
 
+router.put("/update-course/:id", checkAuth, async (req, res) => {
+  try {
+    const { uID } = req.user;
+    const { courseName, price, description, startingDate, endDate } = req.body;
+
+    const matchCourse = await course.findById(req.params.id);
+
+    if (matchCourse.uID !== uID) {
+      return res
+        .status(401)
+        .json({ msg: "You are not authorized to delete this course" });
+    }
+
+    if (req.files) {
+      await cloudinary.uploader.destroy(matchCourse.imageID);
+
+      const { image } = req.files;
+
+      const { secure_url: imageURL, public_id: imageID } =
+        await cloudinary.uploader.upload(image.tempFilePath, {
+          folder: "Institute_Management_App",
+        });
+
+      const updatedCourseData = {
+        courseName,
+        price,
+        description,
+        startingDate,
+        endDate,
+        imageID,
+        imageURL,
+        uID,
+      };
+
+      const updatedCourse = await course.findByIdAndUpdate(
+        req.params.id,
+        updatedCourseData,
+        { new: true }
+      );
+
+      res.status(200).json({ updatedCourse });
+    } else {
+      const updatedCourseData = {
+        courseName,
+        price,
+        description,
+        startingDate,
+        endDate,
+        imageID: matchCourse.imageID,
+        imageURL: matchCourse.imageURL,
+        uID,
+      };
+
+      const updatedCourse = await course.findByIdAndUpdate(
+        req.params.id,
+        updatedCourseData,
+        { new: true }
+      );
+
+      res.status(200).json({ updatedCourse });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.delete("/delete-course/:id", checkAuth, async (req, res) => {
+  try {
+    const matchCourse = await course.findById(req.params.id);
+    const { uID } = req.user;
+
+    if (matchCourse.uID === uID) {
+      await course.findByIdAndDelete(req.params.id);
+      await cloudinary.uploader.destroy(matchCourse.imageID);
+
+      res.status(200).json({ msg: "Course deleted successfully" });
+    } else {
+      res
+        .status(401)
+        .json({ msg: "You are not authorized to delete this post" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 module.exports = router;
