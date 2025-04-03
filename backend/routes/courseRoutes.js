@@ -74,7 +74,7 @@ router.put("/update-course/:id", checkAuth, async (req, res) => {
     if (matchCourse.uID !== uID) {
       return res
         .status(401)
-        .json({ msg: "You are not authorized to delete this course" });
+        .json({ msg: "You are not authorized to update this course" });
     }
 
     if (req.files) {
