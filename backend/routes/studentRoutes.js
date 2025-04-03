@@ -38,6 +38,23 @@ router.post("/add-student", checkAuth, async (req, res) => {
   }
 });
 
+// Get latest 5 students for any particular User
+router.get("/latest-student", checkAuth, async (req, res) => {
+  try {
+    const { uID } = req.user;
+
+    const students = await studentModel
+      .find({ uID })
+      .sort({ $natural: -1 })
+      .limit(5);
+
+    res.status(200).json({ students });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: err.message });
+  }
+});
+
 // Get all students for any particular User
 router.get("/", checkAuth, async (req, res) => {
   try {
@@ -93,14 +110,14 @@ router.put("/update-student/:id", checkAuth, async (req, res) => {
         });
 
       const updatedStudentData = {
-      fullName,
-      phone,
-      email,
-      address,
-      courseID,
-      imageID,
-      imageURL,
-      uID,
+        fullName,
+        phone,
+        email,
+        address,
+        courseID,
+        imageID,
+        imageURL,
+        uID,
       };
 
       const updatedStudent = await studentModel.findByIdAndUpdate(
@@ -117,8 +134,8 @@ router.put("/update-student/:id", checkAuth, async (req, res) => {
         email,
         address,
         courseID,
-        imageID:matchStudent.imageID,
-        imageURL:matchStudent.imageURL,
+        imageID: matchStudent.imageID,
+        imageURL: matchStudent.imageURL,
         uID,
       };
 

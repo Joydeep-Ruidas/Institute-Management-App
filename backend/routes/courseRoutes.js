@@ -4,6 +4,7 @@ const router = express.Router();
 const course = require("../models/courseModel");
 const mongoose = require("mongoose");
 const cloudinary = require("../config/cloudinaryConfig");
+const studentModel=require("../models/studentModel")
 
 router.post("/add-course", checkAuth, async (req, res) => {
   try {
@@ -38,6 +39,24 @@ router.post("/add-course", checkAuth, async (req, res) => {
   }
 });
 
+
+// Get latest 5 courses for any particular User
+router.get("/latest-course", checkAuth, async (req, res) => {
+  try {
+    const { uID } = req.user;
+
+    const courses = await course
+      .find({ uID })
+      .sort({ $natural: -1 })
+      .limit(5);
+
+    res.status(200).json({ courses });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: err.message });
+  }
+});
+
 // Get all course for any particular User
 router.get("/", checkAuth, async (req, res) => {
   try {
@@ -57,7 +76,8 @@ router.get("/course-details/:id", checkAuth, async (req, res) => {
   try {
     const courseDetails = await course.findById(req.params.id);
 
-    res.status(200).json({ courseDetails });
+    const studentDetails = await studentModel.find({courseID:req.params.id})
+    res.status(200).json({ courseDetails, studentDetails });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: err.message });
