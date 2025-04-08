@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 
 const userSignup = async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, instituteName, phone, email, password } = req.body;
     const { image } = req.files;
 
     const existingUser = await userModel.findOne({ email });
@@ -26,6 +26,8 @@ const userSignup = async (req, res) => {
       _id: new mongoose.Types.ObjectId(),
       firstName,
       lastName,
+      instituteName,
+      phone,
       email,
       password: hashPassword,
       imageURL,
@@ -34,7 +36,7 @@ const userSignup = async (req, res) => {
 
     const saveUser = await newUser.save();
 
-    res.status(201).json({ newUser: saveUser });
+    res.status(201).json({ newUser: saveUser, msg:'Account created successfully' });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: err.message });
@@ -47,7 +49,7 @@ const userLogin = async (req, res) => {
 
     const user = await userModel.findOne({ email });
     if (!user) {
-      return res.status(404).json({ msg: "Email not registered" });
+      return res.status(404).json({ msg: "Check your credentials" });
     }
 
     const {
@@ -62,7 +64,7 @@ const userLogin = async (req, res) => {
     const isMatch = await bcrypt.compare(password, hashPassword);
 
     if (!isMatch) {
-      return res.status(401).json({ msg: "Incorrect password" });
+      return res.status(401).json({ msg: "Check your credentials" });
     }
 
     const token = jwt.sign(
@@ -81,7 +83,7 @@ const userLogin = async (req, res) => {
       token,
     };
 
-    res.status(200).json({ userData });
+    res.status(200).json({ userData, msg:'Login successfull' });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: err.message });
