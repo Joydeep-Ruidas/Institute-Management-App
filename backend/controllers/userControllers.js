@@ -56,6 +56,7 @@ const userLogin = async (req, res) => {
       _id,
       firstName,
       lastName,
+      instituteName,
       imageURL,
       imageID,
       password: hashPassword, // Took the user's password and named it hashPassword
@@ -77,6 +78,7 @@ const userLogin = async (req, res) => {
       _id,
       firstName,
       lastName,
+      instituteName,
       email,
       imageURL,
       imageID,

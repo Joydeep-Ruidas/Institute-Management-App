@@ -27,7 +27,7 @@ const Signup = () => {
     if (file) {
       setFormData((prev) => ({
         ...prev,
-        image: file, // storing file object
+        image: file,
       }));
     }
   };
@@ -52,7 +52,6 @@ const Signup = () => {
       }
 
       const userData = await axios.post(API.signup.URL, payload);
-      console.log("Response from server:", userData);
       toast.success(userData.data?.msg);
 
       setFormData({
@@ -74,133 +73,145 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-[#FFEC51] to-[#CDC7E5] p-4">
-      <div className="flex flex-col lg:flex-row w-full max-w-6xl h-full lg:h-[90vh] rounded-md overflow-hidden shadow-lg">
-        {/* Left Section */}
-        <div className="bg-[#7776BC] w-full lg:w-1/2 flex justify-center items-center flex-col gap-2 p-6">
-          <img
-            src={Logo}
-            alt="Logo"
-            className="w-[150px] sm:w-[180px] md:w-[220px] lg:w-[250px]"
-          />
-          <p className="font-bold text-base sm:text-lg md:text-xl text-white text-center">
-            Institute Management App
-          </p>
-          <p className="text-xs sm:text-sm md:text-base text-zinc-300 text-center">
-            Manage your Institute in an easy way...
-          </p>
-        </div>
+    <div className="min-h-screen w-full">
+      {/* 🚫 Mobile Message */}
+      <div className=" sm:hidden flex justify-center items-center min-h-screen bg-[#ffe9f4] px-4 text-center">
+        <p className="text-[#E90074] font-semibold text-lg">
+          This app is not user-friendly on mobile devices.
+          <br /> Please use a tablet, laptop, or desktop.
+        </p>
+      </div>
 
-        {/* Right Section */}
-        <div className="bg-[#FFFBDB] w-full lg:w-1/2 max-h-screen overflow-y-auto flex flex-col items-center gap-6 p-4 sm:p-6 scrollbar-hide">
-          <p className="text-[#192B5D] text-lg sm:text-xl md:text-2xl font-semibold border-b-2">
-            Signup Here
-          </p>
+      {/* ✅ Actual Signup Form (Hidden on Mobile) */}
+      <div className="hidden sm:flex justify-center items-center min-h-screen bg-gradient-to-r from-[#E90074] to-[#dbbeca] p-4">
+        <div className="flex flex-col lg:flex-row w-[95%] h-full lg:h-[90vh] rounded-md overflow-hidden">
+          {/* Left Section */}
+          <div className="bg-[#ffe30c] w-full lg:w-1/2 flex justify-center items-center flex-col gap-2 p-6">
+            <img
+              src={Logo}
+              alt="Logo"
+              className="w-[150px] sm:w-[180px] md:w-[220px] lg:w-[250px]"
+            />
+            <p className="font-bold text-base sm:text-lg md:text-xl text-[#E90074] text-center">
+              Institute Management App
+            </p>
+            <p className="text-xs sm:text-sm md:text-base text-[#8d385b] text-center">
+              Manage your Institute in an easy way...
+            </p>
+          </div>
 
-          <form
-            onSubmit={submitHandler}
-            className="flex flex-col gap-3 w-full max-w-md px-2"
-          >
-            <input
-              type="text"
-              placeholder="Enter First Name"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              required
-              className="border rounded-md p-2 text-[#192B5D]"
-            />
-            <input
-              type="text"
-              placeholder="Enter Last Name"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              required
-              className="border rounded-md p-2 text-[#192B5D]"
-            />
-            <input
-              type="text"
-              placeholder="Enter Institute Name"
-              name="instituteName"
-              value={formData.instituteName}
-              onChange={handleChange}
-              required
-              className="border rounded-md p-2 text-[#192B5D]"
-            />
-            <input
-              type="number"
-              placeholder="Enter Phone No."
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-              className="border rounded-md p-2 text-[#192B5D]"
-            />
-            <input
-              type="email"
-              placeholder="Enter your Email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="border rounded-md p-2 text-[#192B5D]"
-            />
-            <input
-              type="password"
-              placeholder="Enter your password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="border rounded-md p-2 text-[#192B5D]"
-            />
+          {/* Right Section */}
+          <div className="bg-white w-full lg:w-1/2 max-h-screen overflow-y-auto flex flex-col items-center justify-center gap-6 p-4 sm:p-6 scrollbar-hide">
+            <p className="text-[#E90074] py-2 text-lg sm:text-xl md:text-2xl font-semibold border-b-2">
+              Signup Here
+            </p>
 
-            {/* File Upload + Preview Side-by-Side */}
-            <div className="flex items-center justify-center gap-4">
-              {/* Upload Box */}
-              <div>
-                <input
-                  type="file"
-                  id="fileUpload"
-                  className="hidden"
-                  onChange={handleImageChange}
-                />
-                <label
-                  htmlFor="fileUpload"
-                  className="border-2 border-dashed border-[#192B5D] w-20 h-20 flex justify-center items-center rounded-md cursor-pointer text-[#192B5D] hover:bg-[#f5f5f5] transition"
-                >
-                  <MdOutlineAddPhotoAlternate className="text-2xl" />
-                </label>
+            <form
+              onSubmit={submitHandler}
+              className="flex flex-col gap-3 w-full max-w-md px-2"
+            >
+              <input
+                type="text"
+                placeholder="Enter First Name"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+                className="border border-[#FF4191] focus:border-[#FF4191] focus:outline-none rounded-md p-2 text-black"
+              />
+              <input
+                type="text"
+                placeholder="Enter Last Name"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+                className="border border-[#FF4191] focus:border-[#FF4191] focus:outline-none rounded-md p-2 text-black"
+              />
+              <input
+                type="text"
+                placeholder="Enter Institute Name"
+                name="instituteName"
+                value={formData.instituteName}
+                onChange={handleChange}
+                required
+                className="border border-[#FF4191] focus:border-[#FF4191] focus:outline-none rounded-md p-2 text-black"
+              />
+              <input
+                type="number"
+                placeholder="Enter Phone No."
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+                className="border border-[#FF4191] focus:border-[#FF4191] focus:outline-none rounded-md p-2 text-black"
+              />
+              <input
+                type="email"
+                placeholder="Enter your Email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="border border-[#FF4191] focus:border-[#FF4191] focus:outline-none rounded-md p-2 text-black"
+              />
+              <input
+                type="password"
+                placeholder="Enter your password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="border border-[#FF4191] focus:border-[#FF4191] focus:outline-none rounded-md p-2 text-black"
+              />
+
+              {/* File Upload + Preview */}
+              <div className="flex items-center justify-center gap-4">
+                <div>
+                  <input
+                    type="file"
+                    id="fileUpload"
+                    className="hidden"
+                    onChange={handleImageChange}
+                  />
+                  <label
+                    htmlFor="fileUpload"
+                    className="border-2 border-dashed border-[#FF4191] w-20 h-20 flex justify-center items-center rounded-md cursor-pointer text-[#FF4191]  transition"
+                  >
+                    <MdOutlineAddPhotoAlternate className="text-2xl" />
+                  </label>
+                </div>
+
+                {formData.image && (
+                  <div className="w-20 h-20">
+                    <img
+                      src={URL.createObjectURL(formData.image)}
+                      alt="Preview"
+                      className="w-full h-full object-cover rounded-md border border-[#FF4191]"
+                    />
+                  </div>
+                )}
               </div>
 
-              {/* Image Preview */}
-              {formData.image && (
-                <div className="w-20 h-20">
-                  <img
-                    src={URL.createObjectURL(formData.image)}
-                    alt="Preview"
-                    className="w-full h-full object-cover rounded-md border border-[#192B5D]"
-                  />
-                </div>
-              )}
-            </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="bg-[#E90074] p-2 rounded-md text-white font-semibold w-full sm:w-1/2 lg:w-1/3 mx-auto mt-3 cursor-pointer hover:bg-[#FF4191]"
+              >
+                {loading ? <Loader /> : "Signup"}
+              </button>
+            </form>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="bg-[#192B5D] p-2 rounded-md text-white font-semibold w-full sm:w-1/2 lg:w-1/3 mx-auto mt-3 cursor-pointer"
-            >
-              {loading ? <Loader /> : "Signup"}
-            </button>
-          </form>
-
-          <p className="text-sm md:text-base text-[#192B5D] w-full max-w-md text-center">
-            Already have an account?{" "}
-            <Link to={"/login"} className="font-semibold border-b-2">
-              Login Here
-            </Link>
-          </p>
+            <p className="text-sm md:text-base text-[#8d385b] w-full max-w-md text-center">
+              Already have an account?{" "}
+              <Link
+                to={"/login"}
+                className="font-semibold border-b-2 text-[#E90074] hover:text-[#FF4191]"
+              >
+                Login Here
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -29,7 +29,7 @@ const addCourse = async (req, res) => {
 
     const saveCourse = await newCourse.save();
 
-    res.status(201).json({ saveCourse });
+    res.status(201).json({ saveCourse, msg:"New Course Added" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: err.message });

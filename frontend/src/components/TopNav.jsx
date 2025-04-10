@@ -1,16 +1,26 @@
 import React from "react";
-import Logo from "../assets/logo.png";
+import { useNavigate } from "react-router-dom";
 
 const TopNav = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
   return (
     <div className="flex flex-col w-full">
       {/* TopNavbar */}
-      <div className="w-full bg-[#CDC7E5] py-1.5 px-6 flex justify-between items-center">
-        <h2 className="text-[#192B5D] text-lg font-semibold">
-          Joydeep's Coding Academy
+      <div className="w-full border-b-2 border-[#E90074] py-2 px-6 flex justify-between items-center">
+        <div className="flex items-center gap-3">
+        <img src={user.imageURL} alt="" className="w-12 rounded-full overflow-hidden" />
+        <h2 className="text-[#E90074] text-lg font-semibold">
+          {user.instituteName}
         </h2>
-        <img src={Logo} alt="" className="w-14 overflow-hidden" />
-        <button className="text-sm bg-[#FF674D] text-white px-3 py-2 rounded-md cursor-pointer">
+        </div>
+        <button onClick={logoutHandler} className="text-sm bg-[#E90074] hover:bg-[#FF4191] text-white px-3 py-2 rounded-md cursor-pointer">
           Logout
         </button>
       </div>
